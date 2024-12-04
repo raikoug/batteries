@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+if [ ! -f /etc/batteries/configs.toml ]; then
+    echo "Creating default configuration file at /etc/batteries/configs.toml"
+    touch /etc/batteries/configs.toml
+    chmod 644 /etc/batteries/configs.toml
+fi
+exit 0
+

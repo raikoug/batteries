@@ -70,11 +70,13 @@ Output:
 
 ## Installation
 
-### Requirements
+### Build Your Own
+
+#### Requirements
 
 - **Rust**: Make sure Rust and Cargo are installed. Follow [this guide](https://www.rust-lang.org/tools/install) to set them up.
 
-### Build
+#### Build
 
 Git clone the project (also in /tmp) and then build it:
 ```bash
@@ -94,6 +96,24 @@ echo 'device_type = 1' >> /etc/batteries/configs.toml
 If you want to use it everywhere, you can move the binary to `/usr/local/bin`:
 ```bash
 sudo mv target/release/batteries /usr/local/bin/
+```
+
+### Deb package
+Get the latest deb package from the [releases page](https://github.com/raikoug/batteries/releases)
+```bash
+sudo dpkg -i batteries_0.1.0_amd64.deb
+```
+For dependencies, you may need to run:
+```bash
+sudo apt-get install -f
+```
+
+### Make your own deb package
+Build the solution following the Build section and then run:
+```bash
+# always inside batteries base folder
+chmod +x ./packaging/make_deb.sh
+./packaging/make_deb.sh
 ```
 
 ## Configuration
