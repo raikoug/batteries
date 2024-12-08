@@ -11,6 +11,6 @@ cp target/release/batteries packaging/usr/bin/
 chmod 755 packaging/usr/bin/batteries
 
 echo "Building the .deb package..."
-dpkg-deb --build packaging target/deb/batteries_0.1.0_amd64.deb
-echo "Package created: target/deb/batteries_0.1.0_amd64.deb"
+dpkg-deb --build packaging target/deb/batteries_0.2.0_amd64.deb
+echo "Package created: target/deb/batteries_0.2.0_amd64.deb"
 
