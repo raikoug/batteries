@@ -4,7 +4,6 @@ use serde::Serialize;
 use serde_json::to_string_pretty;
 use std::fs::{self, File};
 use std::io::Write;
-use std::path::Path;
 use tabled::{Table, Tabled};
 use zbus::zvariant::{ObjectPath, OwnedObjectPath};
 use zbus::{Connection, Proxy};
@@ -50,11 +49,18 @@ struct SmallDevice {
     device_type: String,
 }
 
+#[cfg(target_os = "windows")]
+const CONFIG_PATH: &str = "C:\\ProgramData\\batteries\\configs.toml";
+
+
+#[cfg(target_os = "linux")]
+const CONFIG_PATH: &str = "/etc/batteries/configs.toml";
+
 #[tokio::main]
 async fn main() -> zbus::Result<()> {
     // Define command-line arguments
     let matches = Command::new("batteries")
-        .version("0.1.0")
+        .version("0.2.0")
         .author("Riccardo Bella <riccardobella@gmail.com>")
         .about("Battery management tool")
         .arg(
@@ -69,14 +75,26 @@ async fn main() -> zbus::Result<()> {
                 .short('l')
                 .long("list")
                 .action(ArgAction::SetTrue)
-                .help("Print detailed info about each device"),
+                .conflicts_with("info")
+                .help("Print extended unfiltered info about each device"),
+        )
+        .arg(
+            Arg::new("info")
+                .short('i')
+                .long("info")
+                .action(ArgAction::SetTrue)
+                .conflicts_with("list")
+                .help("Print extended fiiltered info about each device"),
         )
         .get_matches();
     
     let list: bool = matches.get_flag("list");
     let json: bool = matches.get_flag("json");
+    let info: bool = matches.get_flag("info");
+    let config_path: &str = CONFIG_PATH;
 
-    let config_path = Path::new("/etc/batteries/configs.toml");
+    // check if platform is unix or windows
+    
     let config: Option<Config> = match fs::read_to_string(config_path) {
         Ok(config_content) => toml::from_str(&config_content).ok(),
         Err(err) => match err.kind() {
@@ -188,8 +206,8 @@ async fn main() -> zbus::Result<()> {
             mapped_name: mapped_name.clone(),
             mapped_type: mapped_type.clone(),
             suppressed: suppress,
-            serial: device_serial,
-            vendor: device_vendor,
+            serial: device_serial.clone(),
+            vendor: device_vendor.clone(),
             numeric_type: device_type,
         });
 
@@ -202,6 +220,11 @@ async fn main() -> zbus::Result<()> {
 
     if list && json {
         println!("{}", to_string_pretty(&full_device_list).unwrap());
+    } else if info && json{
+        println!("{}", to_string_pretty(&full_device_list).unwrap());
+    } else if info{
+        let table = Table::new(full_device_list);
+        println!("{}", table);
     } else if list {
         let table = Table::new(full_device_list);
         println!("{}", table);
