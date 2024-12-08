@@ -49,6 +49,7 @@ Output:
 ```
 
 ### Detailed Mode
+Unfiltered mode to show all devices, including suppressed ones.
 ```bash
 batteries -l
 ```
@@ -61,6 +62,18 @@ Output:
 | BIF0_9                                | 50.0%      | Battery     | BIF0_9      | Battery     | true       |                   | MSI    | 2            |
 +---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
 |                                       | 0.0%       | Line Power  |             | Line Power  | true       |                   |        | 1            |
++---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
+| G502 LIGHTSPEED Wireless Gaming Mouse | 52.0%      | Battery     | LG          | mouse       | false      | 9e-7c-81-dd       |        | 2            |
++---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
+| K8BT5.0-2                             | 100.0%     | Keyboard    | FreeeWolf   | keyboard    | false      | 82:AD:9A:2E:4F:8D |        | 6            |
++---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
+```
+
+fitered modee to show all devices, including suppressed ones.
+```bash
+batteries -i
++---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
+| name                                  | percentage | device_type | mapped_name | mapped_type | suppressed | serial            | vendor | numeric_type |
 +---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
 | G502 LIGHTSPEED Wireless Gaming Mouse | 52.0%      | Battery     | LG          | mouse       | false      | 9e-7c-81-dd       |        | 2            |
 +---------------------------------------+------------+-------------+-------------+-------------+------------+-------------------+--------+--------------+
@@ -150,7 +163,8 @@ Usage: batteries [OPTIONS]
 
 Options:
   -j, --json     Print the output in JSON format
-  -l, --list     Print detailed info about each device
+  -l, --list     Print extended unfiltered info about each device
+  -i, --info     Print extended fiiltered info about each device
   -h, --help     Print help
   -V, --version  Print version
 ```
